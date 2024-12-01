@@ -1,4 +1,4 @@
-const StockMovement = require('../Models/stockMovement_model').default;
+import StockMovement from '../Models/stockMovement_model';
 
 const recordStockMovement = async (req, res) => {
   try {
@@ -30,7 +30,7 @@ const getAllStockMovements = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-module.exports={
+export{
     getAllStockMovements,
     getStockMovementById,
     recordStockMovement,

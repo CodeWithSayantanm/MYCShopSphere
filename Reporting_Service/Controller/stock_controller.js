@@ -1,4 +1,4 @@
-const Stock = require('../Models/stock_model').default;
+import Stock from '../Models/stock_model';
 
 const getAllStock = async (req, res) => {
   try {
@@ -35,7 +35,7 @@ const updateStock = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
-module.exports={
+export {
     getAllStock,
     getStockById,
     updateStock,
