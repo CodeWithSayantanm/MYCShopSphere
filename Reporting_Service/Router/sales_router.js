@@ -1,18 +1,18 @@
-const express = require('express');
-const indexRouter = express.Router();
-const salesController = require('../Controller/sales_controller')
-const stockController= require('../Controller/stock_controller')
-const stockMovement=require('../Controller/stockMovement_controller')
+import { Router } from 'express';
+const indexRouter = Router();
+import {getAllSales,getSaleById,createSale} from '../Controller/sales_controller.js';
+import { getAllStock, updateStock, getStockById } from '../Controller/stock_controller.js';
+import { getAllStockMovements, recordStockMovement, getStockMovementById } from '../Controller/stockMovement_controller.js';
 
-indexRouter.get('/', salesController.getAllSales);
-indexRouter.get('/:saleId', salesController.getSaleById);
-indexRouter.post('/', salesController.createSale);
+indexRouter.get('/',getAllSales);
+indexRouter.get('/:saleId', getSaleById);
+indexRouter.post('/', createSale);
 
-indexRouter.get('/', stockController.getAllStock);
-indexRouter.put('/', stockController.updateStock);
-indexRouter.get('/:item_id', stockController.getStockById);
+indexRouter.get('/', getAllStock);
+indexRouter.put('/', updateStock);
+indexRouter.get('/:item_id', getStockById);
 
-indexRouter.get('/', stockMovement.getAllStockMovements);
-indexRouter.post('/', stockMovement.recordStockMovement);
-indexRouter.get('/:movement_id', stockMovement.getStockMovementById);
-module.exports=indexRouter ;
+indexRouter.get('/', getAllStockMovements);
+indexRouter.post('/', recordStockMovement);
+indexRouter.get('/:movement_id', getStockMovementById);
+export default indexRouter ;

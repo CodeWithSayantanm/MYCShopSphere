@@ -1,4 +1,4 @@
-const Stock = require('../Models/stock_model');
+const Stock = require('../Models/stock_model').default;
 
 const getAllStock = async (req, res) => {
   try {

@@ -1,4 +1,4 @@
-const Sales = require('../Models/sales_model');
+import Sales from '../Models/sales_model.js';
 
 const getAllSales = async (req, res) => {
   try {
@@ -27,8 +27,8 @@ const createSale = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
-module.exports={
-    getAllSales,
-    getSaleById,
-    createSale,
+export {
+  getAllSales,
+  getSaleById,
+  createSale,
 };

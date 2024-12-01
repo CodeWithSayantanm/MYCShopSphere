@@ -1,4 +1,4 @@
-const StockMovement = require('../Models/stockMovement_model');
+const StockMovement = require('../Models/stockMovement_model').default;
 
 const recordStockMovement = async (req, res) => {
   try {

@@ -1,9 +1,10 @@
-const mongoose = require('mongoose');
+import { Schema, model } from 'mongoose';
 
-const StockSchema = new mongoose.Schema({
+const StockSchema = new Schema({
   item_id: { type: Number, unique: true, required: true },
   quantity_in_stock: { type: Number, required: true },
   last_updated: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model('Stock', StockSchema);
+const stock= model('Stock', StockSchema);
+export default stock;
