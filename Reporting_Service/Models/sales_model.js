@@ -1,10 +1,11 @@
-const mongoose = require('mongoose');
+import { Schema, Types, model } from 'mongoose';
 
-const SalesSchema = new mongoose.Schema({
+const SalesSchema = new Schema({
   item_id: { type: Number, required: true },
   quantity_sold: { type: Number, required: true },
   sale_date: { type: Date, default: Date.now },
-  total_revenue: { type: mongoose.Types.Decimal128, required: true },
+  total_revenue: { type: Types.Decimal128, required: true },
 });
 
-module.exports = mongoose.model('Sales', SalesSchema);
+const sales= model('Sales', SalesSchema);
+export default sales;
