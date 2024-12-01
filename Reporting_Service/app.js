@@ -1,18 +1,19 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const connectDB = require('./config/database');
-require('dotenv').config();
+import express from 'express';
+import { json } from 'body-parser';
+import connectDB from './config/database';
+import dotenv from 'dotenv';
+dotenv.config(); 
 
-const salesRoutes = require('./Router/sales_router');
+import salesRoutes from './Router/sales_router.js';
 
 const app = express();
 connectDB();
 
-app.use(bodyParser.json());
+app.use(json());
 app.use('/sales',salesRoutes)
 
 app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
 
-module.exports = app;
+export default app;
