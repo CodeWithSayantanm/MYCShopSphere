@@ -10,7 +10,7 @@ import {
 
 const router = Router();
 
-router.get("/getAll", authRole, getAllWishlistController);
+router.get("/", authRole, getAllWishlistController);
 router.post("/", authRole, addWishlistController);
 router.get("/:wishlistId/items", authRole, getWishlistItemController);
 router.post("/:wishlistId/items", authRole, addWishlistItemController);

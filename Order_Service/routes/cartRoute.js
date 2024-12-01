@@ -9,7 +9,7 @@ import {
 } from "../controllers/cartController.js";
 const router = Router();
 
-router.get("/getAllItems", authRole, getAllCartController);
+router.get("/", authRole, getAllCartController);
 router.post("/", authRole, addCartController);
 router.get("/:cartId/items", authRole, getCartController);
 router.post("/:cartId/items", authRole, addCartItemController);
