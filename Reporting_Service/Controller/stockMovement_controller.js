@@ -1,4 +1,4 @@
-import StockMovement from '../Models/stockMovement_model';
+import StockMovement from '../Models/stockMovement_model.js';
 
 const recordStockMovement = async (req, res) => {
   try {

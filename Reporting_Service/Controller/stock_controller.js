@@ -1,4 +1,4 @@
-import Stock from '../Models/stock_model';
+import Stock from '../Models/stock_model.js';
 
 const getAllStock = async (req, res) => {
   try {
