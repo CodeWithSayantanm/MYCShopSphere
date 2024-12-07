@@ -3,6 +3,7 @@ import roleService from "../service/roleService.js"
 import {sendRegisterMail} from "../mail/registermail.js"
 import {sendFrofotPasswordMail} from "../mail/forgotPass.js"
 
+
 const register = async(req,res,next) => {
     // const { name, email, password } = req.body;
     // Add user to the database
@@ -27,12 +28,14 @@ const login = async(req, res, next) => {
         req.session.user = token.user//session saved 
         
         req.session.newpassword = password;
-        // console.log(password);
-        console.log(req.session);
+       
+        // console.log(req.session);
 
         req.session.save();
         //add to rolelist
-        const {id ,name} = req.session.user.role
+        const {name} = req.session.user?.role
+        const id = req.session.user?._id;
+        
         // ad in log in db 
         const rolelist = await roleService.addRoleService(id,name);
 
@@ -144,6 +147,23 @@ const roles =  async (req, res , next ) => {
 }
 
 
+const resetPassword = async (req, res, next) => {
+    try{    
+        const {oldpassword,newpassword} = req.body;
+        // console.log(oldpassword ,newpassword)
+
+
+        const uid = req.session.user?._id;
+        const ans = await userService.resetService(uid,oldpassword,newpassword);
+        if(ans){
+            res.status(200).json({message:"User reset password"});
+        }
+
+    }catch(err){
+        next(err);
+    }
+}
+
 
 
 export default {
@@ -154,5 +174,6 @@ export default {
     delUser,
     Forgot,
     LogOut,
-    roles
+    roles,
+    resetPassword,
 }   

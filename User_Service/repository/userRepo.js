@@ -28,10 +28,18 @@ const deleteUser = async (id)=>{
 
 const getForgotPassword = async (uid)=>{
     // console.log('getForgotPassword repo')
-    return await db.findById(uid)
+    return await db.findById(uid);
 }
-const resetPassword = async () => {
-    
+const resetPassword = async (uid, newhashed_password) => {
+    return await db.findByIdAndUpdate(uid,{password:newhashed_password},{new:true});
+}
+
+//check if user in put password matches
+const fetchPassword = async (uid)=>{
+    return await db.findById(uid);
+}
+const findUserByEmail = async (useremail)=>{
+    return await db.findOne({email:useremail});
 }
 
 
@@ -41,5 +49,8 @@ export default {
     getUserById,
     editUser,
     deleteUser,
-    getForgotPassword
+    getForgotPassword,
+    fetchPassword,
+    resetPassword,
+    
 }

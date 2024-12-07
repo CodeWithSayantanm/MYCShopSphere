@@ -10,6 +10,14 @@ const addRoleService = async (id,name)=>{
     return role;
 }
 
+
+// const isUserAlreadyExists =async (useremail) => {
+    
+// }
+
+
+
 export default {
     addRoleService,
+    
 }
