@@ -1,3 +1,4 @@
+import AppError from "../error/AppError.js";
 import {
   getAllWishlistRepo,
   addWishlistRepo,
@@ -8,15 +9,21 @@ import {
 
 export const getAllWishlistService = async (user) => {
   try {
-    return await getAllWishlistRepo(user.id);
+    const wishlist = await getAllWishlistRepo(user?.id || 1);
+    return wishlist;
   } catch (error) {
-    throw new AppError(error.message, 400);
+    console.error("Error in getAllWishlistService:", error);
+    throw new AppError(
+      `Error fetching wishlist for user ${user?.id || "unknown"}: ${
+        error.message
+      }`,
+      400
+    );
   }
 };
-
 export const addWishlistService = async (user) => {
   try {
-    return await addWishlistRepo(user.id);
+    return await addWishlistRepo(user?.id || 1);
   } catch (error) {
     throw new AppError(error.message, 400);
   }
