@@ -9,7 +9,7 @@ import {
 
 export const getAllCartService = async (user) => {
   try {
-    return await getAllCartRepo(user.id);
+    return await getAllCartRepo(user?.id || 1);
   } catch (error) {
     throw new AppError(error.message, 400);
   }
@@ -17,7 +17,7 @@ export const getAllCartService = async (user) => {
 
 export const addCartService = async (user, items) => {
   try {
-    return await addCartRepo(user.id, items);
+    return await addCartRepo(user?.id || 1, items);
   } catch (error) {
     throw new AppError(error.message, 400);
   }
@@ -31,9 +31,9 @@ export const getCartService = async (cartId) => {
   }
 };
 
-export const addCartItemService = async (cartId) => {
+export const addCartItemService = async (cartId, items_id, quantity) => {
   try {
-    return await addCartItemRepo(cartId);
+    return await addCartItemRepo(cartId, items_id, quantity);
   } catch (error) {
     throw new AppError(error.message, 400);
   }

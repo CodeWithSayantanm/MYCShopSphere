@@ -13,9 +13,9 @@ const router = Router();
 router.get("/", authRole, getAllWishlistController);
 router.post("/", authRole, addWishlistController);
 router.get("/:wishlistId/items", authRole, getWishlistItemController);
-router.post(":wishlistId/items", authRole, addWishlistItemController);
+router.post("/:wishlistId/items", authRole, addWishlistItemController);
 router.delete(
-  ":wishlistId/items/:itemId",
+  "/:wishlistId/items/:itemId",
   authRole,
   deleteWishlistItemController
 );
