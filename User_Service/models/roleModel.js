@@ -6,7 +6,7 @@ const rollListSchema = new mongoose.Schema({
         {
             id: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'roleSchema', // Reference to the Role schema
+                ref: 'userSchema', // Reference to the Role schema
                 required: true
             },
             name:{

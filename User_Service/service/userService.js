@@ -88,7 +88,26 @@ const getForgetPasswordService = async (uid)=>{
 
 }
 
-
+const resetService= async (uid,oldpass,newpass)=>{
+    //uid from session  password form req.body
+    const dbpass = await userRepo.fetchPassword(uid);
+    
+    console.log(typeof(dbpass));
+    if(!dbpass){ throw new AppError("password not found")}
+    
+    const ismatch = await bcrypt.compare(oldpass,dbpass.password)// await missing
+    
+    const newhashed_password = await bcrypt.hash(newpass,10);
+    
+    if(ismatch){
+        const rsetpass = await userRepo.resetPassword(uid, newhashed_password);
+        console.log(rsetpass.password);
+        return rsetpass;
+        
+    }
+     
+    
+}
 
 
 
@@ -103,4 +122,5 @@ export default {
     editUserService,
     deleteUserService,
     getForgetPasswordService,
+    resetService,
 };
