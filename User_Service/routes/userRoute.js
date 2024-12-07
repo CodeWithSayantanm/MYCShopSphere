@@ -18,11 +18,11 @@ userRoute.put('/:userId',auth.authenticate,userController.editUser);
 
 userRoute.delete('/:userId',auth.authenticate,userController.delUser);
 
-userRoute.get('/get/role',userController.roles);
+userRoute.get('/get/role',auth.authenticate,auth.authorization,userController.roles);
 
 userRoute.get('/forgot/password',auth.authenticate,userController.Forgot);
 
-userRoute.get('/reset-password',);
+userRoute.post('/reset-password',userController.resetPassword);
 
 userRoute.get('/',);
 
