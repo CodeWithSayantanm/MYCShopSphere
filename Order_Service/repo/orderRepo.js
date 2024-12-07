@@ -64,14 +64,16 @@ export const updateOrderRepo = async (
   total_amount,
   shipping_address_id,
   billing_address_id,
-  payment_status
+  payment_status,
+  items
 ) => {
-  const todayDate = new Date().toISOString();
+  const todayDate = new Date().toISOString().split("T")[0];
   const conn = await pool.getConnection();
   try {
-    const prev = await conn.query(
+    const [prev] = await conn.query(
       `SELECT * FROM TBL_ORDERS WHERE order_id = ${id}`
     );
+    console.log("Make Order History", user_id);
     await conn.query(
       `INSERT INTO tbl_orders (user_id, order_date, status, total_amount, shipping_address_id, billing_address_id, payment_status, effective_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [
@@ -85,8 +87,9 @@ export const updateOrderRepo = async (
         todayDate,
       ]
     );
+    console.log("Update Order");
     const [result] = await conn.query(
-      `UPDATE tbl_orders SET user_id = ?, order_date = ?, status = ?, total_amount = ?, shipping_address_id = ?, billing_address_id = ?, payment_status = ?, effectiveDate = ? WHERE order_id = ?;
+      `UPDATE tbl_orders SET user_id = ?, order_date = ?, status = ?, total_amount = ?, shipping_address_id = ?, billing_address_id = ?, payment_status = ?, effective_date = ? WHERE order_id = ?;
 `,
       [
         user_id,
@@ -96,10 +99,26 @@ export const updateOrderRepo = async (
         shipping_address_id,
         billing_address_id,
         payment_status,
-        prev[0].effectiveDate,
+        prev[0].effective_date,
         id,
       ]
     );
+    for (let item of items) {
+      const total_price = item.price * item.quantity;
+      const [update] = await conn.query(
+        `Update tbl_order_items set quantity = ?, price = ?, total_price = ? where order_id = ? and item_id = ?`,
+        [item.quantity, item.price, total_price, id, item.item_id]
+      );
+
+      if (update.affectedRows === 0) {
+        await conn.query(
+          `INSERT INTO tbl_order_items (order_id, item_id, quantity, price, total_price) VALUES (?, ?, ?, ?, ?)`,
+          [id, item.item_id, item.quantity, item.price, total_price]
+        );
+      } else {
+        continue;
+      }
+    }
     await conn.commit();
     return result;
   } catch (error) {
@@ -141,15 +160,16 @@ export const makePaymentRepo = async (
   amount,
   payment_status
 ) => {
-  const payment_date = new Date().toISOString();
+  const payment_date = new Date().toISOString().split("T")[0];
   const conn = await pool.getConnection();
-  const effectiveDate = new Date(
-    new Date().setFullYear(new Date().getFullYear() + 10)
-  ).toISOString();
   try {
     const [result] = await conn.query(
-      `INSERT INTO TBL_ORDER_PAYMENT (order_id, payment_method, payment_date, amount, payment_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      [id, payment_method, payment_date, amount, "success"]
+      `INSERT INTO TBL_ORDER_PAYMENT (order_id, payment_method, payment_date, amount, payment_status) VALUES (?, ?, ?, ?, ?)`,
+      [id, payment_method, payment_date, amount, payment_status || "pending"]
+    );
+    await conn.query(
+      `UPDATE TBL_ORDERS payment_status = ? WHERE order_id = ?`,
+      [payment_status || "pending", id]
     );
 
     await conn.commit();
@@ -170,13 +190,16 @@ export const addShippingRepo = async (
   shipping_status
 ) => {
   const conn = await pool.getConnection();
-  const effectiveDate = new Date(
-    new Date().setFullYear(new Date().getFullYear() + 10)
-  ).toISOString();
   try {
     const [result] = await conn.query(
       `INSERT INTO TBL_SHIPPING (order_id, shipping_method, shipping_date, delivery_date, shipping_status) VALUES (?, ?, ?, ?, ?)`,
-      [id, shipping_method, shipping_date, delivery_date, "success"]
+      [
+        id,
+        shipping_method,
+        shipping_date,
+        delivery_date,
+        shipping_status || "pending",
+      ]
     );
     await conn.commit();
     return result.insertId;
@@ -192,7 +215,7 @@ export const updateShippingRepo = async (id, status) => {
   const conn = await pool.getConnection();
   try {
     const [result] = await conn.query(
-      `UPDATE TBL_SHIPPING SET shipping_status = ${status} WHERE order_id = ${id};`
+      `UPDATE TBL_SHIPPING SET shipping_status = "${status}" WHERE order_id = ${id};`
     );
     await conn.commit();
     return result;

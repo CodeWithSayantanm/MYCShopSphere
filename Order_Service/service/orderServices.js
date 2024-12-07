@@ -60,7 +60,8 @@ export const updateOrderService = async (data, user, order_id) => {
       data.total_amount,
       data.shipping_address_id,
       data.billing_address_id,
-      data.payment_status
+      data.payment_status,
+      data.items
     );
   } catch (error) {
     throw new AppError(error.message, 400);
@@ -106,10 +107,10 @@ export const addShippingService = async (
   shipping_method,
   shipping_status
 ) => {
-  const shipping_date = new Date();
-  const delivery_date = new Date(
-    Date.now() + 3 * 24 * 60 * 60 * 1000
-  ).toISOString();
+  const shipping_date = new Date().toISOString().split("T")[0];
+  const delivery_date = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
+    .toISOString()
+    .split("T")[0];
   try {
     return await addShippingRepo(
       order_id,

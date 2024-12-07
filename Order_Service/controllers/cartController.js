@@ -50,7 +50,7 @@ export const deleteCartItemController = async (req, res, next) => {
   try {
     const ordersId = await deleteCartItemService(
       req.params.cartId,
-      req.params.item_id
+      req.params.itemId
     );
     res.status(200).json({ ordersId: ordersId });
   } catch (error) {
