@@ -1,10 +1,12 @@
 import pool from "../config/db.js";
 
 export const getAllWishlistRepo = async (user_id) => {
+  console.log(user_id);
   const [result] = await pool.query(
-    `SELECT * FROM TBL_WISHLIST WHERE user_id = ${user_id}`
+    `SELECT * FROM TBL_WISHLIST WHERE user_id = ?`,
+    [user_id]
   );
-  return result[0];
+  return result;
 };
 
 export const addWishlistRepo = async (user_id) => {
@@ -17,9 +19,10 @@ export const addWishlistRepo = async (user_id) => {
 
 export const getWishlistItemRepo = async (wishlistId) => {
   const [result] = await pool.query(
-    `SELECT * FROM TBL_WISHLIST WHERE user_id = ${wishlistId}`
+    `SELECT * FROM TBL_WISHLIST_ITEMS WHERE wishlist_id = ?`,
+    [wishlistId]
   );
-  return result[0];
+  return result;
 };
 
 export const addWishlistItemRepo = async (wishlistId, item_id) => {
@@ -35,5 +38,8 @@ export const deleteWishlistItemRepo = async (wishlistId, itemId) => {
     `DELETE FROM TBL_WISHLIST_ITEMS WHERE wishlist_id = ? AND item_id = ?`,
     [wishlistId, itemId]
   );
+  if (result.affectedRows === 0) {
+    throw new Error("No matching wishlist item found to delete");
+  }
   return result;
 };

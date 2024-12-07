@@ -76,7 +76,7 @@ export const makePaymentController = async (req, res, next) => {
       req.body.amount,
       req.body.payment_status
     );
-    res.status(200).json({ orderId: ordersId });
+    res.status(200).json({ paymentId: ordersId });
   } catch (error) {
     next(error);
   }
